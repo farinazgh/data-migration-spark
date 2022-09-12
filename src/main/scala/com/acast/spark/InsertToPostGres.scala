@@ -106,7 +106,7 @@ object InsertToPostGres {
     import spark.implicits._
     val episodes = spark.read
       .schema(episodeSchema)
-      .parquet("data/faultyEpisode.parquet")
+      .parquet("classes/data/nullRemoved.parquet")
       .as[Episode]
 
     episodes.printSchema()
@@ -119,37 +119,10 @@ object InsertToPostGres {
 
 //    val df = spark.read.format("jdbc").option("url", "jdbc:mysql://sqoopdb.edu.cloudlab.com/z_dinesh").option().option("dbtable", "t").option("user", "labuser").option("password", "edureka").load()
 
-    episodes.write.jdbc("jdbc:postgresql://dataservice.cwlleutxy2bh.eu-west-1.rds.amazonaws.com", "public.episode_", connectionProperties)
-
-/*
-
-    val jdbcDF2 = spark.read
-      .jdbc("jdbc:postgresql:dbserver", "public.sparkconnectiontest", connectionProperties)
-
-    connectionProperties.put("customSchema", "id DECIMAL(38, 0), name STRING")
-    jdbcDF2.write
-      .jdbc("jdbc:postgresql:dbserver", "schema.tablename", connectionProperties)
-
-    // Saving data to a JDBC source
-    // jdbc:postgresql://dataservice.cwlleutxy2bh.eu-west-1.rds.amazonaws.com:5432/postgres?sslmode=disable
-    jdbcDF.write
-      .format("jdbc")
-      .option("url", "jdbc:postgresql://dataservice.cwlleutxy2bh.eu-west-1.rds.amazonaws.com")
-      .option("dbtable", "public.sparkconnectiontest")
-      .option("user", "postgres")
-      .option("password", "Tcuaescv13571983#")
-      .save()
-
-
-    val jdbcDF = spark.read
-      .format("jdbc")
-      .option("url", "jdbc:postgresql://dataservice.cwlleutxy2bh.eu-west-1.rds.amazonaws.com")
-      .option("dbtable", "public.sparkconnectiontest")
-      .option("user", "postgres")
-      .option("password", "Tcuaescv13571983#")
-      .load()
-
-*/
+    episodes
+      .write.mode(SaveMode.Overwrite)
+      .option("truncate", value = true)
+      .jdbc("jdbc:postgresql://dataservice.cwlleutxy2bh.eu-west-1.rds.amazonaws.com:5432/postgres", "public.episode_", connectionProperties)
 
     spark.stop()
   }

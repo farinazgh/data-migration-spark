@@ -1,3 +1,3 @@
 export PATH=$PATH:/Users/farinaz.ghasemi/tools/spark/bin
-spark-submit --master "local[*]" --class com.acast.
-spark.RemoveNullDataset data-migration-spark-1.0-SNAPSHOT.jar 
+spark-submit --master "local[*]" --class com.acast.spark.RemoveNullDataset data-migration-spark-1.0-SNAPSHOT.jar
+spark-submit --master “local[*]” --class com.acast.spark.InsertToPostGres --jars /Users/farinaz.ghasemi/repos/data-migration-spark/src/main/resources/postgresql-42.5.0.jar --driver-class-path  /Users/farinaz.ghasemi/repos/data-migration-spark/src/main/resources/postgresql-42.5.0.jar  data-migration-spark-1.0-SNAPSHOT.jar
