@@ -50,8 +50,13 @@ object InsertToPostGres {
                     )
 
 
-
   def main(args: Array[String]) {
+
+/*
+    import org.postgresql.util.PGobject
+    val jsonObject = new PGobject
+
+*/
 
     // Set the log level to only print errors
     Logger.getLogger("org").setLevel(Level.ERROR)
@@ -59,15 +64,12 @@ object InsertToPostGres {
       .builder
       .appName("InsertToPostGres")
       .master("local[*]")
-/*      .config("spark.jars", "lib/jdbcdriver/postgresql-42.5.0.jar")
-      .config("spark.executor.extraClassPath", "lib/jdbcdriver/postgresql-42.5.0.jar")*/
       .getOrCreate()
     val episodeSchema = new StructType()
       .add("id", StringType, nullable = true)
       .add("duration", DoubleType, nullable = true)
       .add("contentLength", LongType, nullable = true)
       .add("seasonNumber", LongType, nullable = true)
-
       .add("rating", StringType, nullable = true)
       .add("name", StringType, nullable = true)
       .add("author", StringType, nullable = true)
@@ -116,8 +118,20 @@ object InsertToPostGres {
     connectionProperties.put("user", "postgres")
     connectionProperties.put("password", "Tcuaescv13571983#")
     connectionProperties.put("driver", "org.postgresql.Driver")
+    //    connectionProperties.put("stringtype", "unspecified")
 
-//    val df = spark.read.format("jdbc").option("url", "jdbc:mysql://sqoopdb.edu.cloudlab.com/z_dinesh").option().option("dbtable", "t").option("user", "labuser").option("password", "edureka").load()
+    /*
+         .withColumn("adSettings", to_json(col("adSettings")))
+         .withColumn("sourceMediaUrls", to_json(col("sourceMediaUrls")))
+         .withColumn("timeline", to_json(col("timeline")))
+         .withColumn("permissions", to_json(col("permissions")))
+         .withColumn("body", to_json(col("body")))
+         .withColumn("original", to_json(col("original")))
+         .withColumn("categories", to_json(col("categories")))
+         .withColumn("keywords", to_json(col("keywords")))
+         .withColumn("tags", to_json(col("tags")))
+         */
+
 
     episodes
       .write.mode(SaveMode.Overwrite)
